@@ -27,14 +27,14 @@
             <div class="flex justify-between items-center h-16">
                 <!-- Logo and Mobile Menu Button -->
                 <div class="flex items-center">
-                    <div class="flex-shrink-0 flex items-center space-x-2">
+                    <a href="/" class="flex-shrink-0 flex items-center space-x-2 hover:opacity-80 transition-opacity duration-200">
                         <div class="w-10 h-10 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center shadow-lg">
                             <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path>
                             </svg>
                         </div>
                         <span class="text-xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent hidden sm:block">Eko Sistem</span>
-                    </div>
+                    </a>
                     
                     <!-- Desktop Navigation Links -->
                     <div class="hidden md:ml-8 md:flex md:space-x-1">
