@@ -96,27 +96,6 @@
                                                 U obradi
                                             </button>
                                         </form>
-                                        <form action="{{ route('pickups.updateStatus', $waste) }}" method="POST" class="inline-block" onsubmit="return confirm('Da li ste sigurni da želite da označite ovaj otpad kao preuzet?');">
-                                            @csrf
-                                            <input type="hidden" name="status" value="Preuzet">
-                                            <button type="submit" class="inline-flex items-center px-3 py-1.5 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition-colors duration-200">
-                                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                                </svg>
-                                                Preuzmi
-                                            </button>
-                                        </form>
-                                    @elseif($waste->status === 'U obradi')
-                                        <form action="{{ route('pickups.updateStatus', $waste) }}" method="POST" class="inline-block" onsubmit="return confirm('Da li ste sigurni da želite da označite ovaj otpad kao preuzet?');">
-                                            @csrf
-                                            <input type="hidden" name="status" value="Preuzet">
-                                            <button type="submit" class="inline-flex items-center px-3 py-1.5 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition-colors duration-200">
-                                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                                </svg>
-                                                Preuzmi
-                                            </button>
-                                        </form>
                                     @endif
                                     <a href="{{ route('pickups.show', $waste) }}" class="inline-flex items-center px-3 py-1.5 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors duration-200">
                                         <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">

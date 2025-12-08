@@ -41,21 +41,64 @@
                         <a href="{{ route('dashboard') }}" class="px-4 py-2 rounded-lg text-sm font-medium text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 transition-colors duration-200 {{ request()->routeIs('dashboard') ? 'text-emerald-600 bg-emerald-50' : '' }}">
                             Početna
                         </a>
-                        <a href="{{ route('companies.index') }}" class="px-4 py-2 rounded-lg text-sm font-medium text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 transition-colors duration-200 {{ request()->routeIs('companies.*') ? 'text-emerald-600 bg-emerald-50' : '' }}">
-                            Kompanije
-                        </a>
-                        <a href="{{ route('locations.index') }}" class="px-4 py-2 rounded-lg text-sm font-medium text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 transition-colors duration-200 {{ request()->routeIs('locations.*') ? 'text-emerald-600 bg-emerald-50' : '' }}">
-                            Lokacije
-                        </a>
-                        <a href="{{ route('wastes.index') }}" class="px-4 py-2 rounded-lg text-sm font-medium text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 transition-colors duration-200 {{ request()->routeIs('wastes.*') ? 'text-emerald-600 bg-emerald-50' : '' }}">
-                            Evidencija otpada
-                        </a>
-                        <a href="{{ route('pickups.index') }}" class="px-4 py-2 rounded-lg text-sm font-medium text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 transition-colors duration-200 {{ request()->routeIs('pickups.*') ? 'text-emerald-600 bg-emerald-50' : '' }}">
-                            Preuzimanja
-                        </a>
-                        <a href="{{ route('reports.index') }}" class="px-4 py-2 rounded-lg text-sm font-medium text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 transition-colors duration-200 {{ request()->routeIs('reports.*') ? 'text-emerald-600 bg-emerald-50' : '' }}">
-                            Dokumentacija
-                        </a>
+                        
+                        <!-- Organizacija Dropdown -->
+                        <div class="relative group" id="organizacija-dropdown">
+                            <button class="px-4 py-2 rounded-lg text-sm font-medium text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 transition-colors duration-200 flex items-center {{ request()->routeIs('companies.*') || request()->routeIs('locations.*') || request()->routeIs('operators.*') ? 'text-emerald-600 bg-emerald-50' : '' }}">
+                                Organizacija
+                                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                            <div id="organizacija-menu" class="hidden absolute left-0 mt-1 w-56 bg-white rounded-xl shadow-lg border border-gray-200 py-2 z-50">
+                                <a href="{{ route('companies.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-emerald-50 hover:text-emerald-600 transition-colors {{ request()->routeIs('companies.*') ? 'bg-emerald-50 text-emerald-600' : '' }}">
+                                    Kompanije
+                                </a>
+                                <a href="{{ route('locations.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-emerald-50 hover:text-emerald-600 transition-colors {{ request()->routeIs('locations.*') ? 'bg-emerald-50 text-emerald-600' : '' }}">
+                                    Lokacije
+                                </a>
+                                <a href="{{ route('operators.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-emerald-50 hover:text-emerald-600 transition-colors {{ request()->routeIs('operators.*') ? 'bg-emerald-50 text-emerald-600' : '' }}">
+                                    Operateri
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <!-- Otpad Dropdown -->
+                        <div class="relative group" id="otpad-dropdown">
+                            <button class="px-4 py-2 rounded-lg text-sm font-medium text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 transition-colors duration-200 flex items-center {{ request()->routeIs('wastes.*') || request()->routeIs('pickups.*') ? 'text-emerald-600 bg-emerald-50' : '' }}">
+                                Otpad
+                                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                            <div id="otpad-menu" class="hidden absolute left-0 mt-1 w-56 bg-white rounded-xl shadow-lg border border-gray-200 py-2 z-50">
+                                <a href="{{ route('wastes.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-emerald-50 hover:text-emerald-600 transition-colors {{ request()->routeIs('wastes.*') ? 'bg-emerald-50 text-emerald-600' : '' }}">
+                                    Evidencija otpada
+                                </a>
+                                <a href="{{ route('pickups.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-emerald-50 hover:text-emerald-600 transition-colors {{ request()->routeIs('pickups.*') ? 'bg-emerald-50 text-emerald-600' : '' }}">
+                                    Preuzimanja
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <!-- Dokumentacija Dropdown -->
+                        <div class="relative group" id="dokumentacija-dropdown">
+                            <button class="px-4 py-2 rounded-lg text-sm font-medium text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 transition-colors duration-200 flex items-center {{ request()->routeIs('reports.*') || request()->routeIs('kpo.*') ? 'text-emerald-600 bg-emerald-50' : '' }}">
+                                Dokumentacija
+                                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                            <div id="dokumentacija-menu" class="hidden absolute left-0 mt-1 w-56 bg-white rounded-xl shadow-lg border border-gray-200 py-2 z-50">
+                                <a href="{{ route('reports.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-emerald-50 hover:text-emerald-600 transition-colors {{ request()->routeIs('reports.*') ? 'bg-emerald-50 text-emerald-600' : '' }}">
+                                    Izveštaji
+                                </a>
+                                <a href="{{ route('kpo.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-emerald-50 hover:text-emerald-600 transition-colors {{ request()->routeIs('kpo.*') ? 'bg-emerald-50 text-emerald-600' : '' }}">
+                                    KPO knjiga
+                                </a>
+                            </div>
+                        </div>
+                        
                         <a href="#" class="px-4 py-2 rounded-lg text-sm font-medium text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 transition-colors duration-200">
                             Podešavanja
                         </a>
@@ -97,21 +140,43 @@
                 <a href="{{ route('dashboard') }}" class="block px-3 py-2 rounded-lg text-base font-medium text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 transition-colors duration-200 {{ request()->routeIs('dashboard') ? 'text-emerald-600 bg-emerald-50' : '' }}">
                     Početna
                 </a>
-                <a href="{{ route('companies.index') }}" class="block px-3 py-2 rounded-lg text-base font-medium text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 transition-colors duration-200 {{ request()->routeIs('companies.*') ? 'text-emerald-600 bg-emerald-50' : '' }}">
-                    Kompanije
-                </a>
-                <a href="{{ route('locations.index') }}" class="block px-3 py-2 rounded-lg text-base font-medium text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 transition-colors duration-200 {{ request()->routeIs('locations.*') ? 'text-emerald-600 bg-emerald-50' : '' }}">
-                    Lokacije
-                </a>
-                <a href="{{ route('wastes.index') }}" class="block px-3 py-2 rounded-lg text-base font-medium text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 transition-colors duration-200 {{ request()->routeIs('wastes.*') ? 'text-emerald-600 bg-emerald-50' : '' }}">
-                    Evidencija otpada
-                </a>
-                <a href="{{ route('pickups.index') }}" class="block px-3 py-2 rounded-lg text-base font-medium text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 transition-colors duration-200 {{ request()->routeIs('pickups.*') ? 'text-emerald-600 bg-emerald-50' : '' }}">
-                    Preuzimanja
-                </a>
-                <a href="{{ route('reports.index') }}" class="block px-3 py-2 rounded-lg text-base font-medium text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 transition-colors duration-200 {{ request()->routeIs('reports.*') ? 'text-emerald-600 bg-emerald-50' : '' }}">
-                    Dokumentacija
-                </a>
+                
+                <!-- Organizacija Section -->
+                <div class="pt-2">
+                    <div class="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">Organizacija</div>
+                    <a href="{{ route('companies.index') }}" class="block px-6 py-2 text-sm text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 transition-colors duration-200 {{ request()->routeIs('companies.*') ? 'text-emerald-600 bg-emerald-50' : '' }}">
+                        Kompanije
+                    </a>
+                    <a href="{{ route('locations.index') }}" class="block px-6 py-2 text-sm text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 transition-colors duration-200 {{ request()->routeIs('locations.*') ? 'text-emerald-600 bg-emerald-50' : '' }}">
+                        Lokacije
+                    </a>
+                    <a href="{{ route('operators.index') }}" class="block px-6 py-2 text-sm text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 transition-colors duration-200 {{ request()->routeIs('operators.*') ? 'text-emerald-600 bg-emerald-50' : '' }}">
+                        Operateri
+                    </a>
+                </div>
+                
+                <!-- Otpad Section -->
+                <div class="pt-2">
+                    <div class="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">Otpad</div>
+                    <a href="{{ route('wastes.index') }}" class="block px-6 py-2 text-sm text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 transition-colors duration-200 {{ request()->routeIs('wastes.*') ? 'text-emerald-600 bg-emerald-50' : '' }}">
+                        Evidencija otpada
+                    </a>
+                    <a href="{{ route('pickups.index') }}" class="block px-6 py-2 text-sm text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 transition-colors duration-200 {{ request()->routeIs('pickups.*') ? 'text-emerald-600 bg-emerald-50' : '' }}">
+                        Preuzimanja
+                    </a>
+                </div>
+                
+                <!-- Dokumentacija Section -->
+                <div class="pt-2">
+                    <div class="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">Dokumentacija</div>
+                    <a href="{{ route('reports.index') }}" class="block px-6 py-2 text-sm text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 transition-colors duration-200 {{ request()->routeIs('reports.*') ? 'text-emerald-600 bg-emerald-50' : '' }}">
+                        Izveštaji
+                    </a>
+                    <a href="{{ route('kpo.index') }}" class="block px-6 py-2 text-sm text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 transition-colors duration-200 {{ request()->routeIs('kpo.*') ? 'text-emerald-600 bg-emerald-50' : '' }}">
+                        KPO knjiga
+                    </a>
+                </div>
+                
                 <a href="#" class="block px-3 py-2 rounded-lg text-base font-medium text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 transition-colors duration-200">
                     Podešavanja
                 </a>
@@ -131,8 +196,9 @@
         </div>
     </main>
 
-    <!-- Mobile Menu Toggle Script -->
+    <!-- Dropdown and Mobile Menu Scripts -->
     <script>
+        // Mobile Menu Toggle
         document.getElementById('mobile-menu-button').addEventListener('click', function() {
             const mobileMenu = document.getElementById('mobile-menu');
             const menuIcon = document.getElementById('menu-icon');
@@ -141,6 +207,73 @@
             mobileMenu.classList.toggle('hidden');
             menuIcon.classList.toggle('hidden');
             closeIcon.classList.toggle('hidden');
+        });
+
+        // Desktop Dropdown Menus
+        document.addEventListener('DOMContentLoaded', function() {
+            const dropdowns = [
+                { trigger: 'organizacija-dropdown', menu: 'organizacija-menu' },
+                { trigger: 'otpad-dropdown', menu: 'otpad-menu' },
+                { trigger: 'dokumentacija-dropdown', menu: 'dokumentacija-menu' }
+            ];
+
+            let hideTimeouts = {};
+
+            dropdowns.forEach(function(dropdown) {
+                const trigger = document.getElementById(dropdown.trigger);
+                const menu = document.getElementById(dropdown.menu);
+
+                if (trigger && menu) {
+                    // Show dropdown on mouseenter
+                    trigger.addEventListener('mouseenter', function() {
+                        // Clear any pending hide timeout
+                        if (hideTimeouts[dropdown.menu]) {
+                            clearTimeout(hideTimeouts[dropdown.menu]);
+                            delete hideTimeouts[dropdown.menu];
+                        }
+                        menu.classList.remove('hidden');
+                    });
+
+                    // Hide dropdown on mouseleave with delay
+                    trigger.addEventListener('mouseleave', function() {
+                        hideTimeouts[dropdown.menu] = setTimeout(function() {
+                            menu.classList.add('hidden');
+                        }, 200); // 200ms delay
+                    });
+
+                    // Keep dropdown open when mouse is over menu
+                    menu.addEventListener('mouseenter', function() {
+                        if (hideTimeouts[dropdown.menu]) {
+                            clearTimeout(hideTimeouts[dropdown.menu]);
+                            delete hideTimeouts[dropdown.menu];
+                        }
+                        menu.classList.remove('hidden');
+                    });
+
+                    // Hide dropdown when mouse leaves menu
+                    menu.addEventListener('mouseleave', function() {
+                        hideTimeouts[dropdown.menu] = setTimeout(function() {
+                            menu.classList.add('hidden');
+                        }, 200); // 200ms delay
+                    });
+                }
+            });
+
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', function(event) {
+                dropdowns.forEach(function(dropdown) {
+                    const trigger = document.getElementById(dropdown.trigger);
+                    const menu = document.getElementById(dropdown.menu);
+                    
+                    if (trigger && menu && !trigger.contains(event.target) && !menu.contains(event.target)) {
+                        if (hideTimeouts[dropdown.menu]) {
+                            clearTimeout(hideTimeouts[dropdown.menu]);
+                            delete hideTimeouts[dropdown.menu];
+                        }
+                        menu.classList.add('hidden');
+                    }
+                });
+            });
         });
     </script>
 </body>

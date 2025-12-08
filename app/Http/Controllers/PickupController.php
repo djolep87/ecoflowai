@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\KpoEntry;
+use App\Models\Operator;
 use App\Models\Waste;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class PickupController extends Controller
@@ -29,8 +30,9 @@ class PickupController extends Controller
     public function show(Waste $waste): View
     {
         $waste->load(['company', 'location', 'operator']);
+        $operators = Operator::where('status', 'aktivan')->orderBy('name')->get();
         
-        return view('pickups.show', compact('waste'));
+        return view('pickups.show', compact('waste', 'operators'));
     }
 
     /**
@@ -40,16 +42,33 @@ class PickupController extends Controller
     {
         $validated = $request->validate([
             'status' => ['required', 'string', 'in:U obradi,Preuzet'],
+            'operator_id' => ['required_if:status,Preuzet', 'exists:operators,id'],
+            'datum_preuzimanja' => ['nullable', 'date'],
+            'napomena' => ['nullable', 'string'],
         ]);
 
         $waste->status = $validated['status'];
         
         if ($validated['status'] === 'Preuzet') {
-            $waste->operator_id = Auth::id();
-            $waste->datum_preuzimanja = now();
+            $waste->operator_id = $validated['operator_id'];
+            $waste->datum_preuzimanja = $validated['datum_preuzimanja'] ?? now();
+            if (isset($validated['napomena'])) {
+                $waste->napomena = ($waste->napomena ? $waste->napomena . "\n\n" : '') . 'Napomena pri preuzimanju: ' . $validated['napomena'];
+            }
+            
+            $waste->save();
+            
+            // Automatski kreiraj KPO zapis
+            KpoEntry::create([
+                'waste_id' => $waste->id,
+                'datum' => now()->toDateString(),
+                'kolicina' => $waste->kolicina,
+                'nacin_postupanja' => 'Preuzimanje operater',
+                'opis' => isset($validated['napomena']) ? 'Napomena pri preuzimanju: ' . $validated['napomena'] : null,
+            ]);
+        } else {
+            $waste->save();
         }
-        
-        $waste->save();
 
         $message = $validated['status'] === 'Preuzet' 
             ? 'Otpad je uspešno preuzet.' 

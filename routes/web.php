@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\KpoController;
 use App\Http\Controllers\LocationController;
+use App\Http\Controllers\OperatorController;
 use App\Http\Controllers\PickupController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
@@ -23,7 +25,9 @@ Route::middleware('auth')->group(function () {
     
     Route::resource('companies', CompanyController::class);
     Route::resource('locations', LocationController::class);
+    Route::resource('operators', OperatorController::class);
     Route::resource('wastes', WasteController::class);
+    Route::resource('kpo', KpoController::class);
     
     Route::get('pickups', [PickupController::class, 'index'])->name('pickups.index');
     Route::get('pickups/{waste}', [PickupController::class, 'show'])->name('pickups.show');

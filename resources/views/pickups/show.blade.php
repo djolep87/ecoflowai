@@ -89,9 +89,9 @@
 
         <!-- Actions -->
         @if(in_array($waste->status, ['Prijavljen', 'U obradi']))
-            <div class="flex justify-end space-x-4 pt-6 border-t border-gray-200">
+            <div class="pt-6 border-t border-gray-200">
                 @if($waste->status === 'Prijavljen')
-                    <form action="{{ route('pickups.updateStatus', $waste) }}" method="POST" class="inline-block" onsubmit="return confirm('Da li želite da preuzmete ovaj otpad u obradu?');">
+                    <form action="{{ route('pickups.updateStatus', $waste) }}" method="POST" class="mb-4" onsubmit="return confirm('Da li želite da preuzmete ovaj otpad u obradu?');">
                         @csrf
                         <input type="hidden" name="status" value="U obradi">
                         <button type="submit" class="inline-flex items-center px-6 py-3 bg-yellow-600 text-white rounded-xl font-semibold hover:bg-yellow-700 transition-colors duration-200 shadow-lg hover:shadow-xl">
@@ -102,16 +102,70 @@
                         </button>
                     </form>
                 @endif
-                <form action="{{ route('pickups.updateStatus', $waste) }}" method="POST" class="inline-block" onsubmit="return confirm('Da li ste sigurni da želite da označite ovaj otpad kao preuzet?');">
-                    @csrf
-                    <input type="hidden" name="status" value="Preuzet">
-                    <button type="submit" class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-xl font-semibold hover:from-green-700 hover:to-emerald-700 transition-all duration-200 shadow-lg hover:shadow-xl">
-                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                        </svg>
-                        Označi kao preuzet
-                    </button>
-                </form>
+
+                <!-- Forma za preuzimanje -->
+                <div class="bg-gray-50 rounded-xl p-6 mb-4">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Preuzimanje otpada</h3>
+                    <form action="{{ route('pickups.updateStatus', $waste) }}" method="POST" onsubmit="return confirm('Da li ste sigurni da želite da označite ovaj otpad kao preuzet?');">
+                        @csrf
+                        <input type="hidden" name="status" value="Preuzet">
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                            <!-- Operator -->
+                            <div>
+                                <label for="operator_id" class="block text-sm font-semibold text-gray-700 mb-2">
+                                    Operater <span class="text-red-500">*</span>
+                                </label>
+                                <select 
+                                    name="operator_id" 
+                                    id="operator_id" 
+                                    required
+                                    class="appearance-none relative block w-full px-4 py-3 border border-gray-300 text-gray-900 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-200"
+                                >
+                                    <option value="">Izaberite operatera</option>
+                                    @foreach($operators as $operator)
+                                        <option value="{{ $operator->id }}">{{ $operator->name }} ({{ $operator->broj_dozvole }})</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <!-- Datum preuzimanja -->
+                            <div>
+                                <label for="datum_preuzimanja" class="block text-sm font-semibold text-gray-700 mb-2">
+                                    Datum preuzimanja
+                                </label>
+                                <input 
+                                    type="datetime-local" 
+                                    name="datum_preuzimanja" 
+                                    id="datum_preuzimanja" 
+                                    value="{{ old('datum_preuzimanja', now()->format('Y-m-d\TH:i')) }}"
+                                    class="appearance-none relative block w-full px-4 py-3 border border-gray-300 text-gray-900 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-200"
+                                >
+                            </div>
+                        </div>
+
+                        <!-- Napomena -->
+                        <div class="mb-4">
+                            <label for="napomena" class="block text-sm font-semibold text-gray-700 mb-2">
+                                Napomena
+                            </label>
+                            <textarea 
+                                name="napomena" 
+                                id="napomena" 
+                                rows="3"
+                                class="appearance-none relative block w-full px-4 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-200"
+                                placeholder="Dodatne napomene o preuzimanju..."
+                            >{{ old('napomena') }}</textarea>
+                        </div>
+
+                        <button type="submit" class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-xl font-semibold hover:from-green-700 hover:to-emerald-700 transition-all duration-200 shadow-lg hover:shadow-xl">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            Potvrdi preuzimanje
+                        </button>
+                    </form>
+                </div>
             </div>
         @endif
     </div>

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Waste extends Model
 {
@@ -58,11 +59,19 @@ class Waste extends Model
     }
 
     /**
-     * Get the operator (user) who picked up the waste.
+     * Get the operator who picked up the waste.
      */
     public function operator(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'operator_id');
+        return $this->belongsTo(Operator::class);
+    }
+
+    /**
+     * Get the KPO entries for the waste.
+     */
+    public function kpoEntries(): HasMany
+    {
+        return $this->hasMany(KpoEntry::class);
     }
 }
 
