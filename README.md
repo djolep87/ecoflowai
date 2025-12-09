@@ -57,3 +57,22 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## Setup Notes
+
+### Required Packages
+
+- `barryvdh/laravel-dompdf` - For PDF generation
+  ```bash
+  composer require barryvdh/laravel-dompdf
+  ```
+
+### Storage Link
+
+Create a symbolic link from `public/storage` to `storage/app/public`:
+
+```bash
+php artisan storage:link
+```
+
+This is required for accessing uploaded/generated files (e.g., waste contract PDFs) via the web.

@@ -65,7 +65,7 @@
                         
                         <!-- Otpad Dropdown -->
                         <div class="relative group" id="otpad-dropdown">
-                            <button class="px-4 py-2 rounded-lg text-sm font-medium text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 transition-colors duration-200 flex items-center {{ request()->routeIs('wastes.*') || request()->routeIs('pickups.*') ? 'text-emerald-600 bg-emerald-50' : '' }}">
+                            <button class="px-4 py-2 rounded-lg text-sm font-medium text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 transition-colors duration-200 flex items-center {{ request()->routeIs('wastes.*') || request()->routeIs('pickups.*') || request()->routeIs('waste-records.*') ? 'text-emerald-600 bg-emerald-50' : '' }}">
                                 Otpad
                                 <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
@@ -73,6 +73,9 @@
                             </button>
                             <div id="otpad-menu" class="hidden absolute left-0 mt-1 w-56 bg-white rounded-xl shadow-lg border border-gray-200 py-2 z-50">
                                 <a href="{{ route('wastes.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-emerald-50 hover:text-emerald-600 transition-colors {{ request()->routeIs('wastes.*') ? 'bg-emerald-50 text-emerald-600' : '' }}">
+                                    Prijavljeni otpad
+                                </a>
+                                <a href="{{ route('waste-records.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-emerald-50 hover:text-emerald-600 transition-colors {{ request()->routeIs('waste-records.*') ? 'bg-emerald-50 text-emerald-600' : '' }}">
                                     Evidencija otpada
                                 </a>
                                 <a href="{{ route('pickups.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-emerald-50 hover:text-emerald-600 transition-colors {{ request()->routeIs('pickups.*') ? 'bg-emerald-50 text-emerald-600' : '' }}">
@@ -83,7 +86,7 @@
                         
                         <!-- Dokumentacija Dropdown -->
                         <div class="relative group" id="dokumentacija-dropdown">
-                            <button class="px-4 py-2 rounded-lg text-sm font-medium text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 transition-colors duration-200 flex items-center {{ request()->routeIs('reports.*') || request()->routeIs('kpo.*') ? 'text-emerald-600 bg-emerald-50' : '' }}">
+                            <button class="px-4 py-2 rounded-lg text-sm font-medium text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 transition-colors duration-200 flex items-center {{ request()->routeIs('reports.*') || request()->routeIs('kpo.*') || request()->routeIs('waste-contracts.*') || request()->routeIs('waste-evidence-sheets.*') || request()->routeIs('annual-reports.*') ? 'text-emerald-600 bg-emerald-50' : '' }}">
                                 Dokumentacija
                                 <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
@@ -95,6 +98,15 @@
                                 </a>
                                 <a href="{{ route('kpo.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-emerald-50 hover:text-emerald-600 transition-colors {{ request()->routeIs('kpo.*') ? 'bg-emerald-50 text-emerald-600' : '' }}">
                                     KPO knjiga
+                                </a>
+                                <a href="{{ route('waste-contracts.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-emerald-50 hover:text-emerald-600 transition-colors {{ request()->routeIs('waste-contracts.*') ? 'bg-emerald-50 text-emerald-600' : '' }}">
+                                    Ugovori
+                                </a>
+                                <a href="{{ route('waste-evidence-sheets.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-emerald-50 hover:text-emerald-600 transition-colors {{ request()->routeIs('waste-evidence-sheets.*') ? 'bg-emerald-50 text-emerald-600' : '' }}">
+                                    Evidencioni listovi (EL)
+                                </a>
+                                <a href="{{ route('annual-reports.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-emerald-50 hover:text-emerald-600 transition-colors {{ request()->routeIs('annual-reports.*') ? 'bg-emerald-50 text-emerald-600' : '' }}">
+                                    Godišnji izveštaji
                                 </a>
                             </div>
                         </div>
@@ -159,6 +171,9 @@
                 <div class="pt-2">
                     <div class="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">Otpad</div>
                     <a href="{{ route('wastes.index') }}" class="block px-6 py-2 text-sm text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 transition-colors duration-200 {{ request()->routeIs('wastes.*') ? 'text-emerald-600 bg-emerald-50' : '' }}">
+                        Prijavljeni otpad
+                    </a>
+                    <a href="{{ route('waste-records.index') }}" class="block px-6 py-2 text-sm text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 transition-colors duration-200 {{ request()->routeIs('waste-records.*') ? 'text-emerald-600 bg-emerald-50' : '' }}">
                         Evidencija otpada
                     </a>
                     <a href="{{ route('pickups.index') }}" class="block px-6 py-2 text-sm text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 transition-colors duration-200 {{ request()->routeIs('pickups.*') ? 'text-emerald-600 bg-emerald-50' : '' }}">
@@ -174,6 +189,15 @@
                     </a>
                     <a href="{{ route('kpo.index') }}" class="block px-6 py-2 text-sm text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 transition-colors duration-200 {{ request()->routeIs('kpo.*') ? 'text-emerald-600 bg-emerald-50' : '' }}">
                         KPO knjiga
+                    </a>
+                    <a href="{{ route('waste-contracts.index') }}" class="block px-6 py-2 text-sm text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 transition-colors duration-200 {{ request()->routeIs('waste-contracts.*') ? 'text-emerald-600 bg-emerald-50' : '' }}">
+                        Ugovori
+                    </a>
+                    <a href="{{ route('waste-evidence-sheets.index') }}" class="block px-6 py-2 text-sm text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 transition-colors duration-200 {{ request()->routeIs('waste-evidence-sheets.*') ? 'text-emerald-600 bg-emerald-50' : '' }}">
+                        Evidencioni listovi (EL)
+                    </a>
+                    <a href="{{ route('annual-reports.index') }}" class="block px-6 py-2 text-sm text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 transition-colors duration-200 {{ request()->routeIs('annual-reports.*') ? 'text-emerald-600 bg-emerald-50' : '' }}">
+                        Godišnji izveštaji
                     </a>
                 </div>
                 
