@@ -527,6 +527,70 @@
         </div>
     </div>
 
+    <!-- Bulk Actions Section -->
+    <div class="mb-8">
+        <h2 class="text-2xl font-bold text-gray-900 mb-4">Automatske akcije</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Bulk Generate Evidence Sheets -->
+            <div class="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Masovno generisanje evidencijskih listova</h3>
+                <p class="text-sm text-gray-600 mb-4">
+                    Automatski generiši evidencijone listove za sve firme i sve vrste otpada za izabranu godinu.
+                </p>
+                <form action="{{ route('waste-evidence-sheets.bulk-generate') }}" method="POST" onsubmit="return confirm('Da li ste sigurni da želite da generišete evidencijone listove za sve firme?');">
+                    @csrf
+                    <div class="flex gap-3">
+                        <input 
+                            type="number" 
+                            name="year" 
+                            value="{{ date('Y') }}" 
+                            min="2000"
+                            max="2100"
+                            required
+                            class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                            placeholder="Godina"
+                        >
+                        <button type="submit" class="px-6 py-2 bg-gradient-to-r from-cyan-600 to-cyan-700 text-white rounded-lg font-semibold hover:from-cyan-700 hover:to-cyan-800 transition-all duration-200 shadow-md hover:shadow-lg">
+                            <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                            </svg>
+                            Generiši sve
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Bulk Generate Annual Reports -->
+            <div class="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Masovno generisanje godišnjih izveštaja</h3>
+                <p class="text-sm text-gray-600 mb-4">
+                    Automatski generiši godišnje izveštaje za sve firme koje imaju podatke u evidenciji otpada.
+                </p>
+                <form action="{{ route('annual-reports.bulk-generate') }}" method="POST" onsubmit="return confirm('Da li ste sigurni da želite da generišete godišnje izveštaje za sve firme?');">
+                    @csrf
+                    <div class="flex gap-3">
+                        <input 
+                            type="number" 
+                            name="year" 
+                            value="{{ date('Y') }}" 
+                            min="2000"
+                            max="2100"
+                            required
+                            class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            placeholder="Godina"
+                        >
+                        <button type="submit" class="px-6 py-2 bg-gradient-to-r from-indigo-600 to-indigo-700 text-white rounded-lg font-semibold hover:from-indigo-700 hover:to-indigo-800 transition-all duration-200 shadow-md hover:shadow-lg">
+                            <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                            </svg>
+                            Generiši sve
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- Recent Activities -->
     <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
         <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">

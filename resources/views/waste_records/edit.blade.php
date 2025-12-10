@@ -236,5 +236,64 @@
             </div>
         </form>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const companySelect = document.getElementById('company_id');
+            const wasteTypeInput = document.getElementById('waste_type');
+            const jedinicaSelect = document.getElementById('jedinica_mere');
+
+            // Create datalist for autocomplete
+            let datalist = document.createElement('datalist');
+            datalist.id = 'waste-types-datalist';
+            wasteTypeInput.setAttribute('list', 'waste-types-datalist');
+            document.body.appendChild(datalist);
+
+            // Load waste types when company is selected
+            function loadWasteTypes() {
+                const companyId = companySelect.value;
+                
+                if (!companyId) {
+                    datalist.innerHTML = '';
+                    return;
+                }
+
+                fetch(`{{ route('api.waste-records.waste-types') }}?company_id=${companyId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        datalist.innerHTML = '';
+                        data.forEach(item => {
+                            const option = document.createElement('option');
+                            option.value = item.type;
+                            option.textContent = `${item.type} (${item.unit})`;
+                            option.dataset.unit = item.unit;
+                            datalist.appendChild(option);
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error loading waste types:', error);
+                    });
+            }
+
+            // Auto-fill unit when waste type is selected
+            wasteTypeInput.addEventListener('input', function() {
+                const selectedOption = Array.from(datalist.options).find(
+                    option => option.value === this.value
+                );
+                
+                if (selectedOption && selectedOption.dataset.unit) {
+                    jedinicaSelect.value = selectedOption.dataset.unit;
+                }
+            });
+
+            // Load waste types on company change
+            companySelect.addEventListener('change', loadWasteTypes);
+            
+            // Load on page load if company is already selected
+            if (companySelect.value) {
+                loadWasteTypes();
+            }
+        });
+    </script>
 @endsection
 

@@ -35,6 +35,84 @@
             </div>
         @endif
 
+        <!-- Automatic Generation Section -->
+        <div class="mb-6 bg-gradient-to-r from-blue-50 to-cyan-50 border-l-4 border-blue-500 p-6 rounded-lg">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <svg class="h-6 w-6 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                    </svg>
+                </div>
+                <div class="ml-4 flex-1">
+                    <h3 class="text-lg font-semibold text-blue-900 mb-2">Automatsko generisanje iz evidencije otpada</h3>
+                    <p class="text-sm text-blue-800 mb-4">
+                        Umesto ručnog unosa, možete automatski generisati evidencijone listove za sve vrste otpada iz podataka evidencije otpada (waste_records) za izabranu firmu i godinu.
+                    </p>
+                    <form action="{{ route('waste-evidence-sheets.generate-from-records') }}" method="POST" class="bg-white p-4 rounded-lg border border-blue-200">
+                        @csrf
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <label for="auto_company_id" class="block text-sm font-medium text-gray-700 mb-1">
+                                    Firma <span class="text-red-500">*</span>
+                                </label>
+                                <select 
+                                    name="company_id" 
+                                    id="auto_company_id" 
+                                    required
+                                    class="appearance-none relative block w-full px-3 py-2 border border-gray-300 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                                >
+                                    <option value="">Izaberite firmu</option>
+                                    @foreach($companies as $company)
+                                        <option value="{{ $company->id }}">{{ $company->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div>
+                                <label for="auto_godina" class="block text-sm font-medium text-gray-700 mb-1">
+                                    Godina <span class="text-red-500">*</span>
+                                </label>
+                                <input 
+                                    type="number" 
+                                    name="godina" 
+                                    id="auto_godina" 
+                                    value="{{ date('Y') }}" 
+                                    min="2000"
+                                    max="2100"
+                                    required
+                                    class="relative block w-full px-3 py-2 border border-gray-300 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                                    placeholder="2024"
+                                >
+                            </div>
+                            <div class="flex items-end">
+                                <button type="submit" class="w-full bg-gradient-to-r from-blue-600 to-cyan-600 text-white px-4 py-2 rounded-lg font-semibold hover:from-blue-700 hover:to-cyan-700 transition-all duration-200 shadow-md hover:shadow-lg text-sm">
+                                    <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                    </svg>
+                                    Generiši automatski
+                                </button>
+                            </div>
+                        </div>
+                        <p class="text-xs text-gray-600 mt-3">
+                            <strong>Napomena:</strong> Sistem će automatski kreirati evidencijone listove za sve vrste otpada koje postoje u evidenciji otpada za izabranu firmu i godinu. Već postojeći listovi će biti preskočeni.
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Divider -->
+        <div class="mb-6 flex items-center">
+            <div class="flex-1 border-t border-gray-300"></div>
+            <div class="px-4 text-sm text-gray-500 font-medium">ILI</div>
+            <div class="flex-1 border-t border-gray-300"></div>
+        </div>
+
+        <!-- Manual Form -->
+        <div class="mb-4">
+            <h2 class="text-xl font-bold text-gray-900 mb-2">Ručno dodavanje evidencijong lista</h2>
+            <p class="text-sm text-gray-600">Popunite formu ispod za ručno dodavanje evidencijong lista</p>
+        </div>
+
         <!-- Form -->
         <form action="{{ route('waste-evidence-sheets.store') }}" method="POST" class="space-y-6">
             @csrf
@@ -178,5 +256,76 @@
             </div>
         </form>
     </div>
+
+    <script>
+        // Auto-fill form when company and year are selected
+        document.addEventListener('DOMContentLoaded', function() {
+            const companySelect = document.getElementById('company_id');
+            const yearInput = document.getElementById('godina');
+            const wasteTypeInput = document.getElementById('waste_type');
+            const kolicinaInput = document.getElementById('ukupna_kolicina');
+            const jedinicaSelect = document.getElementById('jedinica_mere');
+
+            function loadWasteTypes() {
+                const companyId = companySelect.value;
+                const year = yearInput.value;
+
+                if (!companyId || !year) {
+                    return;
+                }
+
+                // Show loading state
+                wasteTypeInput.disabled = true;
+                wasteTypeInput.placeholder = 'Učitavanje...';
+
+                fetch(`{{ route('waste-evidence-sheets.get-waste-types') }}?company_id=${companyId}&year=${year}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        wasteTypeInput.disabled = false;
+                        
+                        if (data.length > 0) {
+                            // Create a datalist for autocomplete
+                            let datalist = document.getElementById('waste-types-datalist');
+                            if (!datalist) {
+                                datalist = document.createElement('datalist');
+                                datalist.id = 'waste-types-datalist';
+                                wasteTypeInput.setAttribute('list', 'waste-types-datalist');
+                                document.body.appendChild(datalist);
+                            }
+                            
+                            datalist.innerHTML = '';
+                            data.forEach(item => {
+                                const option = document.createElement('option');
+                                option.value = item.type;
+                                option.textContent = `${item.type} (${item.total} ${item.unit})`;
+                                datalist.appendChild(option);
+                            });
+
+                            wasteTypeInput.placeholder = 'Izaberite vrstu otpada ili unesite novu...';
+                            
+                            // Add event listener to auto-fill quantity when type is selected
+                            wasteTypeInput.addEventListener('change', function() {
+                                const selectedType = data.find(item => item.type === this.value);
+                                if (selectedType) {
+                                    kolicinaInput.value = selectedType.total.toFixed(2);
+                                    jedinicaSelect.value = selectedType.unit;
+                                }
+                            });
+                        } else {
+                            wasteTypeInput.placeholder = 'Npr. Plastika, Papir, Metal...';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error loading waste types:', error);
+                        wasteTypeInput.disabled = false;
+                        wasteTypeInput.placeholder = 'Npr. Plastika, Papir, Metal...';
+                    });
+            }
+
+            // Load waste types when company or year changes
+            companySelect.addEventListener('change', loadWasteTypes);
+            yearInput.addEventListener('change', loadWasteTypes);
+        });
+    </script>
 @endsection
 

@@ -139,5 +139,66 @@ class AnnualReportController extends Controller
         return redirect()->route('annual-reports.index')
             ->with('success', 'Godišnji izveštaj je uspešno obrisan.');
     }
+
+    /**
+     * Bulk generate annual reports for all companies and a year.
+     */
+    public function bulkGenerate(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'year' => ['required', 'integer', 'min:2000', 'max:2100'],
+            'company_ids' => ['nullable', 'array'],
+            'company_ids.*' => ['exists:companies,id'],
+        ]);
+
+        $year = $validated['year'];
+        $companyIds = $validated['company_ids'] ?? Company::pluck('id')->toArray();
+
+        $created = 0;
+        $skipped = 0;
+        $noData = 0;
+
+        foreach ($companyIds as $companyId) {
+            // Check if report already exists
+            $exists = AnnualReport::where('company_id', $companyId)
+                ->where('godina', $year)
+                ->exists();
+
+            if ($exists) {
+                $skipped++;
+                continue;
+            }
+
+            // Generate report data
+            $reportData = $this->reportService->generateReportData($companyId, $year);
+
+            if ($reportData['total_records'] === 0) {
+                $noData++;
+                continue;
+            }
+
+            // Create the report
+            AnnualReport::create([
+                'company_id' => $companyId,
+                'godina' => $year,
+                'ukupno_kolicina' => $reportData['ukupno_kolicina'],
+                'broj_vrsta_otpada' => $reportData['broj_vrsta_otpada'],
+                'napomena' => 'Automatski generisano iz evidencije otpada',
+            ]);
+
+            $created++;
+        }
+
+        $message = "Uspešno generisano {$created} godišnjih izveštaja za godinu {$year}.";
+        if ($skipped > 0) {
+            $message .= " Preskočeno {$skipped} već postojećih.";
+        }
+        if ($noData > 0) {
+            $message .= " {$noData} firmi nema podataka za ovu godinu.";
+        }
+
+        return redirect()->route('annual-reports.index')
+            ->with('success', $message);
+    }
 }
 

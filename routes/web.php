@@ -50,11 +50,23 @@ Route::middleware('auth')->group(function () {
     
     Route::get('waste-evidence-sheets/{id}/pdf', [WasteEvidenceSheetController::class, 'generatePdf'])
         ->name('waste-evidence-sheets.pdf');
+    Route::post('waste-evidence-sheets/generate-from-records', [WasteEvidenceSheetController::class, 'generateFromRecords'])
+        ->name('waste-evidence-sheets.generate-from-records');
+    Route::post('waste-evidence-sheets/bulk-generate', [WasteEvidenceSheetController::class, 'bulkGenerate'])
+        ->name('waste-evidence-sheets.bulk-generate');
+    Route::get('waste-evidence-sheets/get-waste-types', [WasteEvidenceSheetController::class, 'getWasteTypes'])
+        ->name('waste-evidence-sheets.get-waste-types');
     
     Route::post('annual-reports/generate', [AnnualReportController::class, 'generate'])
         ->name('annual-reports.generate');
+    Route::post('annual-reports/bulk-generate', [AnnualReportController::class, 'bulkGenerate'])
+        ->name('annual-reports.bulk-generate');
     Route::get('annual-reports/{id}/pdf', [AnnualReportController::class, 'pdf'])
         ->name('annual-reports.pdf');
+    
+    // API endpoints for autocomplete
+    Route::get('api/waste-records/waste-types', [WasteRecordController::class, 'getWasteTypes'])
+        ->name('api.waste-records.waste-types');
 });
 
 require __DIR__.'/auth.php';

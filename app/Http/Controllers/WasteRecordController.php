@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\WasteRecordCreated;
+use App\Events\WasteRecordDeleted;
+use App\Events\WasteRecordUpdated;
 use App\Models\WasteRecord;
 use App\Models\Company;
 use App\Models\Operator;
@@ -51,10 +54,13 @@ class WasteRecordController extends Controller
             'status' => ['required', 'string', 'in:nastao,spreman_za_predaju,predat'],
         ]);
 
-        WasteRecord::create($validated);
+        $wasteRecord = WasteRecord::create($validated);
+
+        // Dispatch event for automatic updates
+        event(new WasteRecordCreated($wasteRecord));
 
         return redirect()->route('waste-records.index')
-            ->with('success', 'Zapis evidencije otpada je uspešno kreiran.');
+            ->with('success', 'Zapis evidencije otpada je uspešno kreiran. Evidencijoni listovi i godišnji izveštaji su automatski ažurirani.');
     }
 
     /**
@@ -86,9 +92,13 @@ class WasteRecordController extends Controller
         ]);
 
         $wasteRecord->update($validated);
+        $wasteRecord->refresh();
+
+        // Dispatch event for automatic updates
+        event(new WasteRecordUpdated($wasteRecord));
 
         return redirect()->route('waste-records.index')
-            ->with('success', 'Zapis evidencije otpada je uspešno ažuriran.');
+            ->with('success', 'Zapis evidencije otpada je uspešno ažuriran. Evidencijoni listovi i godišnji izveštaji su automatski ažurirani.');
     }
 
     /**
@@ -96,10 +106,44 @@ class WasteRecordController extends Controller
      */
     public function destroy(WasteRecord $wasteRecord): RedirectResponse
     {
+        // Store data before deletion for event
+        $companyId = $wasteRecord->company_id;
+        $year = $wasteRecord->datum_nastanka->year;
+        $wasteType = $wasteRecord->waste_type;
+
         $wasteRecord->delete();
 
+        // Dispatch event for automatic updates
+        event(new WasteRecordDeleted($companyId, $year, $wasteType));
+
         return redirect()->route('waste-records.index')
-            ->with('success', 'Zapis evidencije otpada je uspešno obrisan.');
+            ->with('success', 'Zapis evidencije otpada je uspešno obrisan. Evidencijoni listovi i godišnji izveštaji su automatski ažurirani.');
+    }
+
+    /**
+     * Get waste types for autocomplete (API endpoint).
+     */
+    public function getWasteTypes(Request $request)
+    {
+        $companyId = $request->get('company_id');
+        
+        $query = WasteRecord::select('waste_type', 'jedinica_mere')
+            ->distinct();
+
+        if ($companyId) {
+            $query->where('company_id', $companyId);
+        }
+
+        $wasteTypes = $query->orderBy('waste_type')
+            ->get()
+            ->map(function ($record) {
+                return [
+                    'type' => $record->waste_type,
+                    'unit' => $record->jedinica_mere,
+                ];
+            });
+
+        return response()->json($wasteTypes);
     }
 }
 
